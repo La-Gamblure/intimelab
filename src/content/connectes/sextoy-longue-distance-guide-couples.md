@@ -9,6 +9,7 @@ category: "Connectes"
 keyword_principal: "sextoy longue distance"
 keywords_secondaires: ["vibro connecte longue distance", "sextoy couple distance", "vibro connecte a distance", "lovense longue distance"]
 intent: "informational-commercial"
+image: "/images/hero-sextoy-longue-distance.png"
 disclosure: "Cet article contient des liens d'affiliation. Si vous achetez via nos liens, nous percevons une commission sans cout supplementaire pour vous."
 ---
 
@@ -23,6 +24,8 @@ Ce guide vous explique comment fonctionne cette technologie, quels critères sur
 ## Comment fonctionne un sextoy à distance : Bluetooth, WiFi et Internet
 
 Avant de choisir un vibro connecté longue distance, il faut comprendre une distinction technique fondamentale : **tous les sextoys connectés ne fonctionnent pas à distance illimitée**. La technologie utilisée détermine la portée.
+
+![Types de connexion : Bluetooth, WiFi et Internet](/images/infographie-bluetooth-wifi-internet.png)
 
 ### Bluetooth : la courte portée (0-10 mètres)
 

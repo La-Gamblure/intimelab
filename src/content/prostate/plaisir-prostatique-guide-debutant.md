@@ -9,6 +9,7 @@ category: "Prostate"
 keyword_principal: "plaisir prostatique"
 keywords_secondaires: ["plaisir prostatique definition", "orgasme prostatique", "stimulation prostate debutant", "point p homme", "prostate homme", "massage prostate bienfaits"]
 intent: "informational"
+image: "/images/hero-prostate-guide.png"
 disclosure: "Cet article contient des liens d'affiliation. Si vous achetez via nos liens, nous percevons une commission sans cout supplementaire pour vous."
 ---
 
@@ -46,6 +47,8 @@ Quelques repères pour bien comprendre :
 Pour comprendre pourquoi la stimulation de la prostate peut être aussi intense, il faut s'intéresser à l'anatomie.
 
 ### L'anatomie du Point P homme
+
+![Anatomie de la prostate et localisation du Point P](/images/infographie-anatomie-prostate.png)
 
 La prostate est entourée d'un réseau dense de nerfs qui font partie du **plexus nerveux pelvien** — le même réseau qui innerve le pénis, le périnée et la région anale. C'est cette concentration nerveuse qui explique la sensibilité de la zone.
 

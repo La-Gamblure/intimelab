@@ -13,6 +13,7 @@ const articleSchema = z.object({
   keywords_secondaires: z.array(z.string()).optional(),
   intent: z.string().optional(),
   disclosure: z.string().optional(),
+  image: z.string().optional(),
   jsonld: z.string().optional(),
 });
 
