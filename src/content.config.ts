@@ -1,3 +1,4 @@
+// Convention: content IDs must NOT start with "avis-" or "meilleur-" (reserved for affiliate routes)
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 

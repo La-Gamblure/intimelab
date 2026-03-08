@@ -1,0 +1,43 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbs: BreadcrumbItem[];
+  jsonld?: string;
+}
+
+const { title, description, breadcrumbs, jsonld } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} jsonld={jsonld}>
+  <div class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <nav class="text-sm text-[var(--color-text-muted)] mb-4" aria-label="Fil d'Ariane">
+      <ol class="flex items-center gap-1.5 flex-wrap">
+        {breadcrumbs.map((item, i) => (
+          <>
+            {i > 0 && <li aria-hidden="true">/</li>}
+            <li>
+              {item.href ? (
+                <a href={item.href} class="hover:text-[var(--color-text)] transition-colors cursor-pointer">{item.label}</a>
+              ) : (
+                <span class="text-[var(--color-text-secondary)]">{item.label}</span>
+              )}
+            </li>
+          </>
+        ))}
+      </ol>
+    </nav>
+
+    <slot />
+
+    <AffiliateDisclosure />
+  </div>
+</BaseLayout>

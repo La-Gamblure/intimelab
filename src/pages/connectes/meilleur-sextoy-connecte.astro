@@ -1,0 +1,155 @@
+---
+import AffiliateLayout from '../../layouts/AffiliateLayout.astro';
+import ProductRankCard from '../../components/ProductRankCard.astro';
+import ProductDetailBlock from '../../components/ProductDetailBlock.astro';
+import { productsBySlug } from '../../data/products';
+
+const ranking = [
+  { slug: 'lovense-lush-3', rank: 1, badge: 'Choix de la redaction' },
+  { slug: 'we-vibe-chorus', rank: 2, badge: 'Meilleur couple' },
+  { slug: 'lovense-nora', rank: 3 },
+  { slug: 'satisfyer-love-triangle', rank: 4, badge: 'Meilleur rapport qualite/prix' },
+  { slug: 'we-vibe-melt', rank: 5 },
+  { slug: 'lovense-gush-2', rank: 6 },
+  { slug: 'lovense-max-2', rank: 7 },
+];
+
+// Validation inline (build-failing)
+const rankSlugs = new Set<string>();
+const ranks = new Set<number>();
+for (const r of ranking) {
+  if (!productsBySlug.has(r.slug)) throw new Error(`Ranking: slug "${r.slug}" not in products`);
+  const p = productsBySlug.get(r.slug)!;
+  if (p.category !== 'connectes') throw new Error(`Ranking: "${r.slug}" is not in connectes category`);
+  if (rankSlugs.has(r.slug)) throw new Error(`Ranking: duplicate slug "${r.slug}"`);
+  if (ranks.has(r.rank)) throw new Error(`Ranking: duplicate rank ${r.rank}`);
+  rankSlugs.add(r.slug);
+  ranks.add(r.rank);
+}
+
+const rankedProducts = ranking.map(r => ({
+  product: productsBySlug.get(r.slug)!,
+  rank: r.rank,
+  badge: r.badge,
+}));
+
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Meilleur sextoy connecte 2026",
+  "description": "Comparatif des meilleurs sextoys connectes testes et approuves par IntimeLab.",
+  "numberOfItems": ranking.length,
+  "itemListElement": rankedProducts.map(r => ({
+    "@type": "ListItem",
+    "position": r.rank,
+    "name": r.product.name,
+    "url": `https://intimelab.fr/connectes/avis-${r.product.slug}/`,
+  })),
+});
+
+const breadcrumbs = [
+  { label: 'Accueil', href: '/' },
+  { label: 'Connectes', href: '/connectes/' },
+  { label: 'Meilleur sextoy connecte' },
+];
+---
+
+<AffiliateLayout
+  title="Meilleur sextoy connecte 2026 : comparatif et avis | IntimeLab"
+  description="Quel est le meilleur sextoy connecte en 2026 ? Comparatif des 7 modeles les plus recommandes pour couples et longue distance."
+  breadcrumbs={breadcrumbs}
+  jsonld={jsonld}
+>
+  <header class="mb-12 rounded-2xl bg-gradient-to-br from-[#1A1A2E] via-[var(--color-rose)]/80 to-[var(--color-accent)] p-8 sm:p-12 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="w-full h-full" viewBox="0 0 800 200" fill="none"><circle cx="150" cy="100" r="90" stroke="white" stroke-width="0.5" /><circle cx="650" cy="80" r="110" stroke="white" stroke-width="0.5" /></svg>
+    </div>
+    <div class="relative">
+      <p class="text-sm font-semibold uppercase tracking-widest text-[var(--color-warm)] mb-3">Comparatif 2026</p>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Meilleur sextoy connecte</h1>
+      <p class="text-lg text-white/70 max-w-3xl">
+        {ranking.length} sextoys connectes testes : vibromasseurs, oeufs vibrants, stimulateurs a distance. Nos recommandations pour la connectivite, la puissance et le rapport qualite/prix.
+      </p>
+    </div>
+  </header>
+
+  <!-- Top ranking cards -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Le classement</h2>
+    <div class="space-y-6">
+      {rankedProducts.map(({ product, rank, badge }) => (
+        <ProductRankCard product={product} rank={rank} badge={badge} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Detail blocks -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Analyse detaillee</h2>
+    <div class="space-y-8">
+      {rankedProducts.map(({ product }) => (
+        <ProductDetailBlock product={product} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Comment choisir -->
+  <section class="mb-16 rounded-2xl border border-[var(--color-border)] bg-white p-6 sm:p-8">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Comment choisir son sextoy connecte ?</h2>
+    <div class="text-[var(--color-text-secondary)] space-y-4">
+      <p>
+        Le choix d'un sextoy connecte depend principalement de votre usage : solo, en couple a proximite, ou en couple a longue distance.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Pour les couples a distance</h3>
+      <p>
+        Privilegiez les modeles avec une appli fiable et une connexion Internet (pas seulement Bluetooth). Le <strong>Lovense Lush 3</strong> est la reference avec son appli Lovense Remote. Pour les couples heterosexuels, le duo <strong>Lovense Nora + Max 2</strong> offre une synchronisation unique.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Pour utiliser pendant les rapports</h3>
+      <p>
+        Le <strong>We-Vibe Chorus</strong> est concu specifiquement pour etre porte pendant l'amour, avec une forme ajustable et une telecommande tactile.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Pour un budget serre</h3>
+      <p>
+        Le <strong>Satisfyer Love Triangle</strong> offre un rapport qualite/prix imbattable avec la technologie Air Pulse et la connectivite via appli, le tout a moins de 50 EUR.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Questions frequentes</h2>
+    <div class="space-y-4">
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Les sextoys connectes sont-ils securises ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          Les grandes marques (Lovense, We-Vibe) utilisent des connexions chiffrees. Cependant, utilisez toujours un mot de passe fort sur votre appli et ne partagez le controle qu'avec des personnes de confiance.
+        </div>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Quelle portee pour le controle a distance ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          En Bluetooth seul, la portee est d'environ 10-15 metres. Via Internet (Lovense Remote, We-Connect), le controle est illimite — votre partenaire peut etre a l'autre bout du monde.
+        </div>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Sont-ils vraiment silencieux ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          La plupart des modeles modernes sont tres discrets (moins de 40dB). Le Lovense Lush 3 est particulierement silencieux. Les masturbateurs (Max 2, Gush 2) sont generalement un peu plus bruyants.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Maillage -->
+  <nav class="flex flex-wrap gap-4 text-sm">
+    <a href="/recommandations/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">← Toutes nos recommandations</a>
+    <a href="/connectes/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Guides connectes</a>
+    <a href="/connectes/sextoy-longue-distance-guide-couples/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Guide longue distance</a>
+  </nav>
+</AffiliateLayout>

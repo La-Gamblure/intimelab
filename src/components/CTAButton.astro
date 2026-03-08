@@ -1,0 +1,27 @@
+---
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+  label?: string;
+}
+
+const { product, label } = Astro.props;
+const hasUrl = product.affiliateUrl !== '#';
+const defaultLabel = hasUrl ? 'Decouvrir →' : 'Bientot disponible';
+const text = label || defaultLabel;
+---
+
+{hasUrl ? (
+  <a
+    href={`/go/${product.slug}`}
+    rel="noopener sponsored"
+    class="inline-block px-5 py-2.5 rounded-full bg-[var(--color-accent)] text-white font-semibold text-sm hover:bg-[var(--color-accent-hover)] transition-colors shadow-md hover:shadow-lg cursor-pointer"
+  >
+    {text}
+  </a>
+) : (
+  <span class="inline-block px-5 py-2.5 rounded-full bg-[var(--color-border)] text-[var(--color-text-muted)] font-semibold text-sm opacity-60 cursor-not-allowed">
+    {text}
+  </span>
+)}

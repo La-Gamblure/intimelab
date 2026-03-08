@@ -1,0 +1,67 @@
+---
+import type { Product } from '../data/products';
+import ProsConsList from './ProsConsList.astro';
+import CTAButton from './CTAButton.astro';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const reviewUrl = `/${product.category}/avis-${product.slug}/`;
+---
+
+<section id={product.slug} class="rounded-2xl border border-[var(--color-border)] bg-white p-6 sm:p-8">
+  <div class="flex flex-col sm:flex-row items-start gap-5 mb-6">
+    <div class="w-full sm:w-28 h-28 rounded-xl overflow-hidden shrink-0">
+      {product.image ? (
+        <img
+          src={product.image}
+          alt={product.name}
+          class="w-full h-full object-cover"
+          loading="lazy"
+          width="112"
+          height="112"
+        />
+      ) : (
+        <div class="w-full h-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-rose)] flex items-center justify-center">
+          <span class="text-white/80 text-2xl font-bold">{product.brand[0]}</span>
+        </div>
+      )}
+    </div>
+    <div>
+      <span class="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wide">{product.brand}</span>
+      <h3 class="font-bold text-[var(--color-text)] text-2xl mb-1">{product.name}</h3>
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-bold text-[var(--color-accent)]">{product.rating.toFixed(1)}/10</span>
+        <span class="text-sm text-[var(--color-text-muted)]">{product.priceRange}</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-[var(--color-text-secondary)] mb-6">{product.description}</p>
+
+  <ProsConsList pros={product.pros} cons={product.cons} />
+
+  <div class="mt-6">
+    <h4 class="font-bold text-[var(--color-text)] mb-3">Caracteristiques</h4>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {product.features.map(f => (
+        <div class="rounded-lg bg-[var(--color-bg-subtle)] px-3 py-2">
+          <span class="text-xs text-[var(--color-text-muted)] block">{f.label}</span>
+          <span class="text-sm font-medium text-[var(--color-text)]">{f.value}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-6 flex gap-3 flex-wrap">
+    <CTAButton product={product} label={`Acheter le ${product.name} →`} />
+    <a
+      href={reviewUrl}
+      class="inline-block px-5 py-2.5 rounded-full border border-[var(--color-accent)] text-[var(--color-accent)] font-semibold text-sm hover:bg-[var(--color-accent-light)] transition-colors cursor-pointer"
+    >
+      Lire notre avis complet
+    </a>
+  </div>
+</section>

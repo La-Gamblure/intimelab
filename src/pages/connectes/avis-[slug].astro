@@ -1,0 +1,156 @@
+---
+import AffiliateLayout from '../../layouts/AffiliateLayout.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import ProsConsList from '../../components/ProsConsList.astro';
+import ProductRatingGrid from '../../components/ProductRatingGrid.astro';
+import { products, productsBySlug, type Product } from '../../data/products';
+
+export function getStaticPaths() {
+  return products
+    .filter(p => p.category === 'connectes')
+    .map(p => ({
+      params: { slug: p.slug },
+      props: { product: p },
+    }));
+}
+
+const { product } = Astro.props as { product: Product };
+
+const alternatives = product.alternatives
+  .map(slug => productsBySlug.get(slug))
+  .filter((p): p is Product => p !== undefined);
+
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": product.name,
+  "brand": { "@type": "Brand", "name": product.brand },
+  "description": product.description,
+  "review": {
+    "@type": "Review",
+    "author": { "@type": "Organization", "name": "IntimeLab" },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": product.rating,
+      "bestRating": 10,
+      "worstRating": 0,
+    },
+    "reviewBody": product.description,
+  },
+});
+
+const breadcrumbs = [
+  { label: 'Accueil', href: '/' },
+  { label: 'Connectes', href: '/connectes/' },
+  { label: `Avis ${product.name}` },
+];
+---
+
+<AffiliateLayout
+  title={`Avis ${product.name} : test et review | IntimeLab`}
+  description={`Notre avis complet sur le ${product.name} de ${product.brand}. Test, notes detaillees, avantages, inconvenients et alternatives.`}
+  breadcrumbs={breadcrumbs}
+  jsonld={jsonld}
+>
+  <!-- Hero -->
+  <header class="mb-10">
+    <div class="flex flex-col sm:flex-row gap-6 items-start">
+      <div class="w-full sm:w-40 h-40 rounded-2xl overflow-hidden shrink-0">
+        {product.image ? (
+          <img src={product.image} alt={product.name} class="w-full h-full object-cover" loading="eager" width="160" height="160" />
+        ) : (
+          <div class="w-full h-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-rose)] flex items-center justify-center">
+            <span class="text-white/80 text-4xl font-bold">{product.brand[0]}</span>
+          </div>
+        )}
+      </div>
+      <div>
+        <span class="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wide">{product.brand}</span>
+        <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] mb-2">{product.name}</h1>
+        <p class="text-lg text-[var(--color-text-secondary)] mb-3">{product.tagline}</p>
+        <div class="flex items-center gap-4 mb-4">
+          <span class="text-2xl font-bold text-[var(--color-accent)]">{product.rating.toFixed(1)}/10</span>
+          <span class="text-sm text-[var(--color-text-muted)]">{product.priceRange}</span>
+        </div>
+        <CTAButton product={product} label={`Acheter le ${product.name} →`} />
+      </div>
+    </div>
+  </header>
+
+  <!-- Description -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">C'est quoi ?</h2>
+    <p class="text-[var(--color-text-secondary)] leading-relaxed">{product.description}</p>
+  </section>
+
+  <!-- Pour qui -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Pour qui ?</h2>
+    <p class="text-[var(--color-text-secondary)] leading-relaxed">{product.targetAudience}</p>
+  </section>
+
+  <!-- Pros/Cons -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Avantages et inconvenients</h2>
+    <ProsConsList pros={product.pros} cons={product.cons} />
+  </section>
+
+  <!-- Features -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Caracteristiques</h2>
+    <div class="rounded-xl border border-[var(--color-border)] bg-white overflow-hidden">
+      <table class="w-full text-sm">
+        <tbody>
+          {product.features.map((f, i) => (
+            <tr class={i % 2 === 0 ? 'bg-[var(--color-bg-subtle)]' : 'bg-white'}>
+              <td class="px-4 py-3 font-semibold text-[var(--color-text)] whitespace-nowrap">{f.label}</td>
+              <td class="px-4 py-3 text-[var(--color-text-secondary)]">{f.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Ratings -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Notre note</h2>
+    <ProductRatingGrid ratings={product.ratings} overall={product.rating} />
+  </section>
+
+  <!-- Prix + CTA -->
+  <section class="mb-10 rounded-2xl bg-gradient-to-r from-[var(--color-accent-light)] to-[var(--color-rose-light)] p-6 sm:p-8 text-center">
+    <h2 class="text-xl font-bold text-[var(--color-text)] mb-2">{product.name}</h2>
+    <p class="text-2xl font-bold text-[var(--color-accent)] mb-4">{product.priceRange}</p>
+    <CTAButton product={product} label={`Acheter le ${product.name} →`} />
+  </section>
+
+  <!-- Alternatives -->
+  {alternatives.length > 0 && (
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Alternatives</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {alternatives.map(alt => (
+          <a
+            href={`/${alt.category}/avis-${alt.slug}/`}
+            class="rounded-xl border border-[var(--color-border)] bg-white p-4 hover:shadow-md transition-shadow cursor-pointer block"
+          >
+            <span class="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">{alt.brand}</span>
+            <h3 class="font-bold text-[var(--color-text)] mb-1">{alt.name}</h3>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-[var(--color-accent)]">{alt.rating.toFixed(1)}/10</span>
+              <span class="text-xs text-[var(--color-text-muted)]">{alt.priceRange}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Maillage -->
+  <nav class="flex flex-wrap gap-4 text-sm">
+    <a href="/connectes/meilleur-sextoy-connecte/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">← Comparatif sextoys connectes</a>
+    <a href="/recommandations/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Toutes nos recommandations</a>
+    <a href="/connectes/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Guides connectes</a>
+  </nav>
+</AffiliateLayout>

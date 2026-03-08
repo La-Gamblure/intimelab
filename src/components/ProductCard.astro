@@ -1,0 +1,54 @@
+---
+import type { Product } from '../data/products';
+import CTAButton from './CTAButton.astro';
+
+interface Props {
+  product: Product;
+  showPrice?: boolean;
+}
+
+const { product, showPrice = true } = Astro.props;
+const reviewUrl = `/${product.category}/avis-${product.slug}/`;
+---
+
+<div class="rounded-2xl border border-[var(--color-border)] bg-white p-5 hover:shadow-lg transition-shadow group">
+  <div class="aspect-[4/3] rounded-xl overflow-hidden mb-4">
+    {product.image ? (
+      <img
+        src={product.image}
+        alt={product.name}
+        class="w-full h-full object-cover"
+        loading="lazy"
+        width="400"
+        height="300"
+      />
+    ) : (
+      <div class="w-full h-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-rose)] flex items-center justify-center">
+        <span class="text-white/80 text-4xl font-bold">{product.brand[0]}</span>
+      </div>
+    )}
+  </div>
+
+  <div class="mb-1">
+    <span class="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wide">{product.brand}</span>
+  </div>
+
+  <h3 class="font-bold text-[var(--color-text)] text-lg mb-1">{product.name}</h3>
+
+  <p class="text-sm text-[var(--color-text-secondary)] mb-3 line-clamp-2">{product.tagline}</p>
+
+  <div class="flex items-center gap-2 mb-4">
+    <span class="text-sm font-bold text-[var(--color-accent)]">{product.rating.toFixed(1)}/10</span>
+    {showPrice && <span class="text-xs text-[var(--color-text-muted)]">{product.priceRange}</span>}
+  </div>
+
+  <div class="flex gap-3">
+    <CTAButton product={product} />
+    <a
+      href={reviewUrl}
+      class="inline-block px-5 py-2.5 rounded-full border border-[var(--color-accent)] text-[var(--color-accent)] font-semibold text-sm hover:bg-[var(--color-accent-light)] transition-colors cursor-pointer"
+    >
+      Notre avis
+    </a>
+  </div>
+</div>

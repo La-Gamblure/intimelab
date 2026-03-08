@@ -1,0 +1,155 @@
+---
+import AffiliateLayout from '../../layouts/AffiliateLayout.astro';
+import ProductRankCard from '../../components/ProductRankCard.astro';
+import ProductDetailBlock from '../../components/ProductDetailBlock.astro';
+import { productsBySlug } from '../../data/products';
+
+const ranking = [
+  { slug: 'lovense-edge-2', rank: 1, badge: 'Choix de la redaction' },
+  { slug: 'lelo-hugo', rank: 2, badge: 'Premium' },
+  { slug: 'we-vibe-vector', rank: 3 },
+  { slug: 'aneros-helix-syn', rank: 4, badge: 'Meilleur debutant' },
+  { slug: 'lelo-billy-2', rank: 5 },
+  { slug: 'lovense-hush-2', rank: 6 },
+  { slug: 'aneros-progasm', rank: 7 },
+];
+
+// Validation inline (build-failing)
+const rankSlugs = new Set<string>();
+const ranks = new Set<number>();
+for (const r of ranking) {
+  if (!productsBySlug.has(r.slug)) throw new Error(`Ranking: slug "${r.slug}" not in products`);
+  const p = productsBySlug.get(r.slug)!;
+  if (p.category !== 'prostate') throw new Error(`Ranking: "${r.slug}" is not in prostate category`);
+  if (rankSlugs.has(r.slug)) throw new Error(`Ranking: duplicate slug "${r.slug}"`);
+  if (ranks.has(r.rank)) throw new Error(`Ranking: duplicate rank ${r.rank}`);
+  rankSlugs.add(r.slug);
+  ranks.add(r.rank);
+}
+
+const rankedProducts = ranking.map(r => ({
+  product: productsBySlug.get(r.slug)!,
+  rank: r.rank,
+  badge: r.badge,
+}));
+
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Meilleur masseur prostatique 2026",
+  "description": "Comparatif des meilleurs masseurs prostatiques testes et approuves par IntimeLab.",
+  "numberOfItems": ranking.length,
+  "itemListElement": rankedProducts.map(r => ({
+    "@type": "ListItem",
+    "position": r.rank,
+    "name": r.product.name,
+    "url": `https://intimelab.fr/prostate/avis-${r.product.slug}/`,
+  })),
+});
+
+const breadcrumbs = [
+  { label: 'Accueil', href: '/' },
+  { label: 'Prostate', href: '/prostate/' },
+  { label: 'Meilleur masseur prostatique' },
+];
+---
+
+<AffiliateLayout
+  title="Meilleur masseur prostatique 2026 : comparatif et avis | IntimeLab"
+  description="Quel est le meilleur masseur prostatique en 2026 ? Comparatif des 7 modeles les plus recommandes, testes sur le confort, la puissance et le rapport qualite/prix."
+  breadcrumbs={breadcrumbs}
+  jsonld={jsonld}
+>
+  <header class="mb-12 rounded-2xl bg-gradient-to-br from-[#1A1A2E] to-[var(--color-accent)] p-8 sm:p-12 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="w-full h-full" viewBox="0 0 800 200" fill="none"><circle cx="150" cy="100" r="90" stroke="white" stroke-width="0.5" /><circle cx="650" cy="80" r="110" stroke="white" stroke-width="0.5" /></svg>
+    </div>
+    <div class="relative">
+      <p class="text-sm font-semibold uppercase tracking-widest text-[var(--color-warm)] mb-3">Comparatif 2026</p>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">Meilleur masseur prostatique</h1>
+      <p class="text-lg text-white/70 max-w-3xl">
+        {ranking.length} masseurs prostatiques testes sur le confort, la puissance, la connectivite et le rapport qualite/prix. Notre classement complet pour vous aider a choisir.
+      </p>
+    </div>
+  </header>
+
+  <!-- Top ranking cards -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Le classement</h2>
+    <div class="space-y-6">
+      {rankedProducts.map(({ product, rank, badge }) => (
+        <ProductRankCard product={product} rank={rank} badge={badge} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Detail blocks -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Analyse detaillee</h2>
+    <div class="space-y-8">
+      {rankedProducts.map(({ product }) => (
+        <ProductDetailBlock product={product} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Comment choisir -->
+  <section class="mb-16 rounded-2xl border border-[var(--color-border)] bg-white p-6 sm:p-8">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Comment choisir son masseur prostatique ?</h2>
+    <div class="text-[var(--color-text-secondary)] space-y-4">
+      <p>
+        Le choix d'un masseur prostatique depend de plusieurs facteurs personnels : votre niveau d'experience, vos preferences en termes de sensations, et votre budget.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Debutant : commencez en douceur</h3>
+      <p>
+        Si c'est votre premiere experience, privilegiez un modele de taille modeste avec un design ergonomique. L'<strong>Aneros Helix Syn</strong> est ideal pour decouvrir les sensations prostatiques a votre rythme, sans vibration. Si vous preferez un modele vibrant, le <strong>LELO Billy 2</strong> offre une entree en matiere douce.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Intermediaire : explorez les vibrations connectees</h3>
+      <p>
+        Une fois a l'aise, les modeles connectes comme le <strong>Lovense Edge 2</strong> ou le <strong>We-Vibe Vector</strong> offrent une richesse de modes et la possibilite de controle a distance — ideal pour les couples.
+      </p>
+      <h3 class="text-lg font-bold text-[var(--color-text)]">Avance : visez le premium</h3>
+      <p>
+        Les utilisateurs experimentes apprecieront le <strong>LELO Hugo</strong> pour sa finition luxueuse et ses vibrations sophistiquees, ou l'<strong>Aneros Progasm</strong> pour des sensations mecaniques intenses.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Questions frequentes</h2>
+    <div class="space-y-4">
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Un masseur prostatique est-il dangereux ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          Non, utilise correctement avec du lubrifiant adapte, un masseur prostatique est sans danger. Choisissez un modele avec base de securite et materiaux certifies (silicone medical). En cas de douleur, arretez immediatement.
+        </div>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Quel lubrifiant utiliser ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          Avec un masseur en silicone, utilisez exclusivement un lubrifiant a base d'eau. Les lubrifiants a base de silicone peuvent endommager le materiau. Appliquez-en generesement.
+        </div>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-white">
+        <summary class="p-4 cursor-pointer font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)]">
+          Avec ou sans vibration pour commencer ?
+        </summary>
+        <div class="px-4 pb-4 text-sm text-[var(--color-text-secondary)]">
+          Les deux approches sont valables. Les modeles sans vibration (Aneros) favorisent l'apprentissage des sensations prostatiques naturelles. Les modeles vibrants (Lovense, LELO) sont plus immediats dans le plaisir procure. C'est une question de preference.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Maillage -->
+  <nav class="flex flex-wrap gap-4 text-sm">
+    <a href="/recommandations/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">← Toutes nos recommandations</a>
+    <a href="/prostate/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Guides prostate</a>
+    <a href="/prostate/plaisir-prostatique-guide-debutant/" class="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium cursor-pointer">Guide debutant</a>
+  </nav>
+</AffiliateLayout>

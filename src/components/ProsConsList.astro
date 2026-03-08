@@ -1,0 +1,40 @@
+---
+interface Props {
+  pros: string[];
+  cons: string[];
+}
+
+const { pros, cons } = Astro.props;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div class="rounded-xl border border-green-200 bg-green-50/50 p-4">
+    <h4 class="font-bold text-green-800 mb-3 flex items-center gap-2">
+      <span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">+</span>
+      Avantages
+    </h4>
+    <ul class="space-y-2">
+      {pros.map(pro => (
+        <li class="flex items-start gap-2 text-sm text-green-900">
+          <span class="text-green-600 font-bold mt-0.5 shrink-0">+</span>
+          <span>{pro}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="rounded-xl border border-red-200 bg-red-50/50 p-4">
+    <h4 class="font-bold text-red-800 mb-3 flex items-center gap-2">
+      <span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-sm font-bold">&minus;</span>
+      Inconvenients
+    </h4>
+    <ul class="space-y-2">
+      {cons.map(con => (
+        <li class="flex items-start gap-2 text-sm text-red-900">
+          <span class="text-red-600 font-bold mt-0.5 shrink-0">&minus;</span>
+          <span>{con}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

@@ -4,6 +4,11 @@ import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const articles = await getCollection('connectes');
+  for (const a of articles) {
+    if (['avis-', 'meilleur-'].some(p => a.id.startsWith(p))) {
+      throw new Error(`Article "${a.id}" uses reserved prefix. Rename the file.`);
+    }
+  }
   return articles.map(article => ({
     params: { slug: article.id },
     props: { article },
