@@ -1,0 +1,95 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TOC from '../components/TOC.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+
+interface Props {
+  title: string;
+  meta_description: string;
+  h1: string;
+  date_published: string;
+  date_modified: string;
+  author?: string;
+  category: string;
+  categorySlug: string;
+  disclosure?: string;
+  image?: string;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  meta_description,
+  h1,
+  date_published,
+  date_modified,
+  author = 'La redaction IntimeLab',
+  category,
+  categorySlug,
+  disclosure,
+  image,
+  headings,
+} = Astro.props;
+
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "datePublished": date_published,
+  "dateModified": date_modified,
+  "author": { "@type": "Person", "name": author },
+  "publisher": { "@type": "Organization", "name": "IntimeLab" },
+  "description": meta_description,
+  "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.href },
+});
+---
+
+<BaseLayout title={title} description={meta_description} jsonld={jsonld}>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+    <nav class="text-sm text-[var(--color-text-muted)] mb-8" aria-label="Fil d'Ariane">
+      <ol class="flex items-center gap-1.5 flex-wrap">
+        <li><a href="/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Accueil</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href={`/${categorySlug}/`} class="hover:text-[var(--color-text)] transition-colors cursor-pointer">{category}</a></li>
+        <li aria-hidden="true">/</li>
+        <li class="text-[var(--color-text-secondary)] truncate max-w-[220px]">{h1}</li>
+      </ol>
+    </nav>
+
+    {disclosure && <AffiliateDisclosure text={disclosure} />}
+
+    <article>
+      <header class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] leading-tight mb-4">
+          {h1}
+        </h1>
+        <div class="flex items-center gap-3 text-sm text-[var(--color-text-muted)] mb-6">
+          <time datetime={date_published}>
+            {new Date(date_published).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {date_modified !== date_published && (
+            <span>
+              · Mis a jour le {new Date(date_modified).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
+          )}
+        </div>
+        {image && (
+          <img
+            src={image}
+            alt={h1}
+            class="w-full rounded-xl object-cover max-h-80"
+            width="768"
+            height="320"
+            loading="eager"
+          />
+        )}
+      </header>
+
+      <TOC headings={headings} />
+
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

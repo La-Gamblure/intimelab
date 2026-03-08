@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('prostate'))
+  .sort((a, b) => new Date(b.data.date_published).getTime() - new Date(a.data.date_published).getTime());
+---
+
+<BaseLayout
+  title="Prostate & masculin — Guides educatifs | IntimeLab"
+  description="Guides educatifs sur le plaisir prostatique, la stimulation et le bien-etre masculin. Contenu bienveillant et independant."
+>
+  <div class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <nav class="text-sm text-[var(--color-text-muted)] mb-8" aria-label="Fil d'Ariane">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Accueil</a></li>
+        <li aria-hidden="true">/</li>
+        <li class="text-[var(--color-text-secondary)]">Prostate & masculin</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] mb-4">Prostate & masculin</h1>
+    <p class="text-lg text-[var(--color-text-secondary)] mb-10 max-w-2xl">
+      Tout comprendre sur le plaisir prostatique : anatomie, techniques, bienfaits, et recommandations d'accessoires. Des guides clairs et bienveillants.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {articles.map(article => (
+        <ArticleCard
+          title={article.data.h1}
+          description={article.data.meta_description}
+          href={`/prostate/${article.id}/`}
+          date={article.data.date_published}
+          category="Prostate"
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

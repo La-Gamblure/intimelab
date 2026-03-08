@@ -1,0 +1,46 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-border)] mt-0">
+  <div class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-5">
+        <a href="/" class="inline-block cursor-pointer">
+          <span class="text-lg font-bold text-[var(--color-accent)]">IntimeLab</span>
+        </a>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)] max-w-xs">
+          Guides educatifs sur le plaisir intime.
+          Contenu independant, approche bienveillante, recommandations transparentes.
+        </p>
+      </div>
+
+      <div class="md:col-span-3">
+        <h3 class="font-semibold text-[var(--color-text)] mb-3 text-xs uppercase tracking-widest">Guides</h3>
+        <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+          <li><a href="/prostate/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Prostate</a></li>
+          <li><a href="/connectes/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Connectes</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-4">
+        <h3 class="font-semibold text-[var(--color-text)] mb-3 text-xs uppercase tracking-widest">Informations</h3>
+        <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+          <li><a href="/a-propos/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">A propos</a></li>
+          <li><a href="/contact/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Contact</a></li>
+          <li><a href="/mentions-legales/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Mentions legales</a></li>
+          <li><a href="/confidentialite/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Politique de confidentialite</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-[var(--color-text-muted)]">
+        &copy; {currentYear} IntimeLab
+      </p>
+      <p class="text-xs text-[var(--color-text-muted)] text-center sm:text-right max-w-md">
+        Ce site contient des liens d'affiliation. Les recommandations restent independantes.
+      </p>
+    </div>
+  </div>
+</footer>

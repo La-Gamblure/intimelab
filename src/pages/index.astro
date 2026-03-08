@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const prostateArticles = await getCollection('prostate');
+const connectesArticles = await getCollection('connectes');
+const allArticles = [
+  ...prostateArticles.map(a => ({ ...a, categoryLabel: 'Prostate', categorySlug: 'prostate' })),
+  ...connectesArticles.map(a => ({ ...a, categoryLabel: 'Connectes', categorySlug: 'connectes' })),
+].sort((a, b) => new Date(b.data.date_published).getTime() - new Date(a.data.date_published).getTime());
+
+const categories = [
+  { label: 'Prostate & masculin', slug: 'prostate', description: 'Guides educatifs sur le plaisir prostatique, la stimulation et le bien-etre masculin.', count: prostateArticles.length },
+  { label: 'Sextoys connectes', slug: 'connectes', description: 'Guides sur les sextoys connectes, la longue distance et les applis pour couples.', count: connectesArticles.length },
+];
+---
+
+<BaseLayout
+  title="IntimeLab — Guides educatifs sur le plaisir intime"
+  description="IntimeLab : guides educatifs, bienveillants et independants sur le plaisir intime. Prostate, sextoys connectes, bien-etre sexuel."
+>
+  <section class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <div class="max-w-2xl">
+      <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] leading-tight mb-4">
+        Comprendre son plaisir, sans tabou
+      </h1>
+      <p class="text-lg text-[var(--color-text-secondary)] leading-relaxed mb-8">
+        IntimeLab est un espace educatif independant. On explique, on rassure, on recommande — avec bienveillance et transparence.
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+    <h2 class="text-xl font-bold text-[var(--color-text)] mb-6">Nos guides</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {categories.map(cat => (
+        <a href={`/${cat.slug}/`} class="block border border-[var(--color-border)] rounded-lg p-6 hover:border-[var(--color-accent)] transition-colors cursor-pointer bg-white">
+          <h3 class="font-bold text-[var(--color-text)] mb-2">{cat.label}</h3>
+          <p class="text-sm text-[var(--color-text-muted)] mb-3">{cat.description}</p>
+          <span class="text-xs font-medium text-[var(--color-accent)]">{cat.count} article{cat.count > 1 ? 's' : ''}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {allArticles.length > 0 && (
+    <section class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+      <h2 class="text-xl font-bold text-[var(--color-text)] mb-6">Derniers articles</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allArticles.map(article => (
+          <ArticleCard
+            title={article.data.h1}
+            description={article.data.meta_description}
+            href={`/${article.categorySlug}/${article.id}/`}
+            date={article.data.date_published}
+            category={article.categoryLabel}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('connectes'))
+  .sort((a, b) => new Date(b.data.date_published).getTime() - new Date(a.data.date_published).getTime());
+---
+
+<BaseLayout
+  title="Sextoys connectes — Guides educatifs | IntimeLab"
+  description="Guides sur les sextoys connectes, la longue distance et les applis pour couples. Contenu independant et comparatifs detailles."
+>
+  <div class="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <nav class="text-sm text-[var(--color-text-muted)] mb-8" aria-label="Fil d'Ariane">
+      <ol class="flex items-center gap-1.5">
+        <li><a href="/" class="hover:text-[var(--color-text)] transition-colors cursor-pointer">Accueil</a></li>
+        <li aria-hidden="true">/</li>
+        <li class="text-[var(--color-text-secondary)]">Sextoys connectes</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)] mb-4">Sextoys connectes</h1>
+    <p class="text-lg text-[var(--color-text-secondary)] mb-10 max-w-2xl">
+      Vibromasseurs connectes, sextoys longue distance, applis couple : nos guides pour maintenir l'intimite, meme a distance.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {articles.map(article => (
+        <ArticleCard
+          title={article.data.h1}
+          description={article.data.meta_description}
+          href={`/connectes/${article.id}/`}
+          date={article.data.date_published}
+          category="Connectes"
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

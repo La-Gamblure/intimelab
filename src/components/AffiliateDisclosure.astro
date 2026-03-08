@@ -1,0 +1,10 @@
+---
+interface Props {
+  text?: string;
+}
+const { text = "Cet article contient des liens d'affiliation. Si vous achetez via nos liens, nous percevons une commission sans cout supplementaire pour vous." } = Astro.props;
+---
+
+<div class="border border-[var(--color-border)] rounded-lg px-4 py-3 mb-8 text-sm text-[var(--color-text-muted)]">
+  <p>{text}</p>
+</div>
